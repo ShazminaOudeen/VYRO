@@ -22,3 +22,23 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Node / frontend
+node_modules/
+dist/
+.env
+.env.local
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Maven build output
+target/
+
+# Keep the Maven wrapper (the *.jar rule above would otherwise ignore it)
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+logs/
