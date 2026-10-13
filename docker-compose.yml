@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: vyro-db
+    environment:
+      MYSQL_DATABASE: vyro
+      MYSQL_USER: vyro
+      MYSQL_PASSWORD: vyro
+      MYSQL_ROOT_PASSWORD: root
+      TZ: UTC
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - vyro_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  vyro_db:
