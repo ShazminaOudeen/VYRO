@@ -1,122 +1,72 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Layout, Switch, Typography, Space, Card, Button, Row, Col, theme } from 'antd';
+import { MoonOutlined, SunOutlined, CalendarOutlined, TeamOutlined, OrderedListOutlined } from '@ant-design/icons';
+import { useThemeMode } from './theme/ThemeContext';
 
-function App() {
-  const [count, setCount] = useState(0)
+const { Header, Content } = Layout;
+
+export default function App() {
+  const { mode, toggle } = useThemeMode();
+  const { token } = theme.useToken();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
+      <Header
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+          padding: '0 16px',
+          background: token.colorBgContainer,
+          borderBottom: `1px solid ${token.colorBorder}`,
+        }}
+      >
+        <Space size={10}>
+          <div
+            style={{
+              width: 34, height: 34, borderRadius: 8, display: 'grid', placeItems: 'center',
+              background: token.colorPrimary, color: token.colorTextLightSolid, fontWeight: 700,
+            }}
+          >
+            V
+          </div>
+          <Typography.Text strong style={{ fontSize: 18 }}>VYRO</Typography.Text>
+        </Space>
 
-      <div className="ticks"></div>
+        <Switch
+          checked={mode === 'dark'}
+          onChange={toggle}
+          checkedChildren={<MoonOutlined />}
+          unCheckedChildren={<SunOutlined />}
+          aria-label="Toggle dark mode"
+        />
+      </Header>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Content style={{ padding: 16, maxWidth: 1000, width: '100%', margin: '0 auto' }}>
+        <Typography.Title level={2} style={{ marginTop: 8 }}>Your gym. In motion.</Typography.Title>
+        <Typography.Paragraph type="secondary">
+          Discover classes, reserve your spot, and keep every session running smoothly.
+        </Typography.Paragraph>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <Row gutter={[12, 12]}>
+          {[
+            { icon: <CalendarOutlined />, label: 'Bookings' },
+            { icon: <TeamOutlined />, label: 'Members' },
+            { icon: <OrderedListOutlined />, label: 'Waitlists' },
+          ].map((t) => (
+            <Col xs={24} sm={8} key={t.label}>
+              <Card>
+                <Space direction="vertical">
+                  <span style={{ color: token.colorPrimary, fontSize: 20 }}>{t.icon}</span>
+                  <Typography.Text strong>{t.label}</Typography.Text>
+                </Space>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+
+        <Button type="primary" style={{ marginTop: 16 }}>Primary button</Button>
+      </Content>
+    </Layout>
+  );
 }
-
-export default App
