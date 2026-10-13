@@ -1,14 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { ConfigProvider } from 'antd';
 import { vyroDark, vyroLight, type Mode } from './themes';
-
-interface ThemeCtx {
-  mode: Mode;
-  toggle: () => void;
-}
-
-const Ctx = createContext<ThemeCtx>({ mode: 'dark', toggle: () => {} });
-export const useThemeMode = () => useContext(Ctx);
+import { Ctx } from './context';
 
 function initialMode(): Mode {
   try {
@@ -30,7 +23,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
     const cfg = mode === 'dark' ? vyroDark : vyroLight;
-    // keep the page background in sync, including overscroll areas on phones
     document.body.style.background =
       (cfg.token?.colorBgLayout as string) ?? (cfg.token?.colorBgBase as string);
     document.documentElement.style.colorScheme = mode;

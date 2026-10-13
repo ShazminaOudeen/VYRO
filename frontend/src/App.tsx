@@ -1,6 +1,6 @@
 import { Layout, Switch, Typography, Space, Card, Button, Row, Col, theme } from 'antd';
 import { MoonOutlined, SunOutlined, CalendarOutlined, TeamOutlined, OrderedListOutlined } from '@ant-design/icons';
-import { useThemeMode } from './theme/ThemeContext';
+import { useThemeMode } from './theme/context';
 
 const { Header, Content } = Layout;
 
