@@ -61,16 +61,17 @@ All logic lives in `BookingService`, inside `@Transactional`, after locking the 
 
 ## 5. Automated tests
 
-- [ ] Use a fixed `Clock` in tests
-- [ ] Test: booking with a free seat, booking a full class (waitlist), queue order
-- [ ] Test: duplicate booking refused
-- [ ] Test: past class refused
-- [ ] Test: cancel before cutoff succeeds, after cutoff refused
-- [ ] Test: waitlist promotion on cancel, and skipping a member who now overlaps
-- [ ] Test: overlapping classes refused
-- [ ] Test: create-class validation (capacity, duration, past start)
-- [ ] Concurrency test: two parallel bookings for the last seat, only one gets BOOKED
-- [ ] Confirm `./mvnw verify` passes locally and in CI
+- [x] Use a fixed `Clock` in tests
+- [x] Test: booking with a free seat, booking a full class (waitlist), queue order
+- [x] Test: duplicate booking refused
+- [x] Test: past class refused
+- [x] Test: cancel before cutoff succeeds, after cutoff refused
+- [x] Test: waitlist promotion on cancel, and skipping a member who now overlaps
+- [x] Test: overlapping classes refused
+- [x] Test: create-class validation (capacity, duration, past start)
+- [x] Concurrency test: two parallel bookings for the last seat, only one gets BOOKED
+- [x] Confirm `./mvnw verify` passes locally and in CI
+
 
 ## 6. Frontend: shared pieces
 
