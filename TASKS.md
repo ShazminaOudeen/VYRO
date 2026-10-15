@@ -97,11 +97,12 @@ All logic lives in `BookingService`, inside `@Transactional`, after locking the 
 
 ## 8. Frontend: staff side
 
-- [ ] Create-class form: title, coach, start date and time, duration, capacity
-- [ ] Client-side hints for validation, with the server message as the final word
-- [ ] Class list with a link to each roster
-- [ ] Roster page: members with a seat, and the waitlist in queue order
-- [ ] Loading, empty and error states
+- [x] Create-class form: title, coach, start date and time, duration, capacity
+- [x] Client-side hints for validation, with the server message as the final word
+- [x] Class list with a link to each roster
+- [x] Roster page: members with a seat, and the waitlist in queue order
+- [x] Loading, empty and error states
+
 
 ## 9. Bonus items (each one done well counts)
 
