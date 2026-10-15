@@ -86,13 +86,14 @@ All logic lives in `BookingService`, inside `@Transactional`, after locking the 
 
 ## 7. Frontend: member side
 
-- [ ] Schedule for the next 7 days, grouped by day
-- [ ] Each class shows title, coach, start time, duration, and seats left or waitlist size
-- [ ] Book button: shows straight away whether the member got a seat or joined the waitlist, plus queue place
-- [ ] Server rule messages shown clearly (duplicate, started, overlap)
-- [ ] My bookings page: upcoming bookings and waitlist places
-- [ ] Cancel button, disabled with the reason shown when it is no longer allowed
-- [ ] Loading, empty and error states on both pages
+- [x] Schedule for the next 7 days, grouped by day
+- [x] Each class shows title, coach, start time, duration, and seats left or waitlist size
+- [x] Book button: shows straight away whether the member got a seat or joined the waitlist, plus queue place
+- [x] Server rule messages shown clearly (duplicate, started, overlap)
+- [x] My bookings page: upcoming bookings and waitlist places
+- [x] Cancel button, disabled with the reason shown when it is no longer allowed
+- [x] Loading, empty and error states on both pages
+
 
 ## 8. Frontend: staff side
 

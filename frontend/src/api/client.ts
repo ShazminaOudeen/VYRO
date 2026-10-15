@@ -15,9 +15,11 @@ api.interceptors.request.use((config) => {
     const storedUserId = localStorage.getItem('vyro-user-id');
     if (storedUserId) {
         config.headers['X-Acting-User'] = storedUserId;
+        config.headers['X-User-Id'] = storedUserId;
     }
     return config;
 });
+
 
 /**
  * Extracts a readable human-friendly message from an API error response.
@@ -62,10 +64,12 @@ export async function bookClass(classId: number, memberId: number): Promise<Book
     return res.data;
 }
 
-export async function cancelBooking(bookingId: number): Promise<Booking> {
-    const res = await api.post<Booking>(`/api/bookings/${bookingId}/cancel`);
+export async function cancelBooking(bookingId: number, memberId?: number): Promise<Booking> {
+    const params = memberId ? { memberId } : undefined;
+    const res = await api.post<Booking>(`/api/bookings/${bookingId}/cancel`, null, { params });
     return res.data;
 }
+
 
 export async function fetchMyBookings(memberId: number): Promise<Booking[]> {
     const res = await api.get<Booking[]>(`/api/members/${memberId}/bookings`);
