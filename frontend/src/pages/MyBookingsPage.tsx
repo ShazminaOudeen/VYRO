@@ -1,6 +1,6 @@
 import { Typography, Card } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
-import { useUser } from '../context/UserContext';
+import { useUser } from '../context/userContext';
 
 export function MyBookingsPage() {
     const { currentUser } = useUser();
