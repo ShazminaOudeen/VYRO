@@ -1,7 +1,5 @@
 # VYRO Gym Class Booking: Task Checklist
 
-Prepared for Shazmina |&#32;
-
 Tick each box as you finish it. Work in the order below, because later modules depend on earlier ones.
 
 ## 0. Already done
@@ -16,49 +14,50 @@ Tick each box as you finish it. Work in the order below, because later modules d
 
 ## 1. Backend foundation (about 20 min)
 
-- [ ] Create branch `feature/backend-foundation`
-- [ ] Create entities: `AppUser`, `GymClass`, `Booking` (+ enums `Role`, `BookingStatus`)
-- [ ] Create repositories, including `findByIdForUpdate` with `PESSIMISTIC_WRITE`
-- [ ] Add `Clock` bean in Asia/Colombo (`TimeConfig`)
-- [ ] Add `ApiError`, `ErrorCode`, `BusinessRuleException`, `NotFoundException`
-- [ ] Add `GlobalExceptionHandler` (400 invalid input, 404 not found, 409 business rule, 500 unexpected)
-- [ ] Add `DataSeeder`: at least 3 members, 1 staff, 8 classes, one full class with a waitlist, one class starting within 2 hours
-- [ ] Run on an empty database and confirm the seeder log line
-- [ ] Commit, push, merge, CI green
+- [x] Create branch `feature/backend-foundation`
+- [x] Create entities: `AppUser`, `GymClass`, `Booking` (+ enums `Role`, `BookingStatus`)
+- [x] Create repositories, including `findByIdForUpdate` with `PESSIMISTIC_WRITE`
+- [x] Add `Clock` bean in Asia/Colombo (`TimeConfig`)
+- [x] Add `ApiError`, `ErrorCode`, `BusinessRuleException`, `NotFoundException`
+- [x] Add `GlobalExceptionHandler` (400 invalid input, 404 not found, 409 business rule, 500 unexpected)
+- [x] Add `DataSeeder`: at least 3 members, 1 staff, 8 classes, one full class with a waitlist, one class starting within 2 hours
+- [x] Run on an empty database and confirm the seeder log line
+- [x] Commit, push, merge, CI green
 
 ## 2. Booking rules (most heavily graded)
 
 All logic lives in `BookingService`, inside `@Transactional`, after locking the class row.
 
-- [ ] Rule 1: free seat gives BOOKED, full class gives WAITLISTED with a queue place (first come, first served)
-- [ ] Rule 2: no duplicate active booking (BOOKED or WAITLISTED) for the same class and member
-- [ ] Rule 3: cannot book a class that has already started or finished
-- [ ] Rule 4: cancellation refused less than 2 hours before start
-- [ ] Rule 5: when a BOOKED member cancels, the first eligible waitlisted member is promoted automatically (no lost or double seat)
-- [ ] Rule 6: no overlapping classes for a member's BOOKED classes
-- [ ] Rule 7: staff create-class validation: capacity 1 to 50, duration 15 to 180, start must be in the future, times in Asia/Colombo
-- [ ] Every rule returns a clear message and a distinct error code
-- [ ] Decide and document the open questions (see section 10)
+- [x] Rule 1: free seat gives BOOKED, full class gives WAITLISTED with a queue place (first come, first served)
+- [x] Rule 2: no duplicate active booking (BOOKED or WAITLISTED) for the same class and member
+- [x] Rule 3: cannot book a class that has already started or finished
+- [x] Rule 4: cancellation refused less than 2 hours before start
+- [x] Rule 5: when a BOOKED member cancels, the first eligible waitlisted member is promoted automatically (no lost or double seat)
+- [x] Rule 6: no overlapping classes for a member's BOOKED classes
+- [x] Rule 7: staff create-class validation: capacity 1 to 50, duration 15 to 180, start must be in the future, times in Asia/Colombo
+- [x] Every rule returns a clear message and a distinct error code
+- [x] Decide and document the open questions (see section 10)
 
 ## 3. REST API
 
-- [ ] `GET /api/users` (for the user switcher)
-- [ ] `GET /api/classes` (next 7 days, with seats left or waitlist size)
-- [ ] `POST /api/classes/{id}/bookings` (book)
-- [ ] `GET /api/members/{id}/bookings` (my bookings: upcoming BOOKED and WAITLISTED, with queue place and a `cancellable` flag plus reason)
-- [ ] `DELETE /api/bookings/{id}` or `POST /api/bookings/{id}/cancel` (cancel)
-- [ ] `POST /api/classes` (staff create class)
-- [ ] `GET /api/classes/{id}/roster` (seated members and waitlist in queue order)
-- [ ] Check the acting user's role on staff endpoints and ownership on cancel (do not rely on hidden buttons)
-- [ ] CORS configured from an environment variable
-- [ ] Use DTOs, not entities, in responses
+- [x] `GET /api/users` (for the user switcher)
+- [x] `GET /api/classes` (next 7 days, with seats left or waitlist size)
+- [x] `POST /api/classes/{id}/bookings` (book)
+- [x] `GET /api/members/{id}/bookings` (my bookings: upcoming BOOKED and WAITLISTED, with queue place and a `cancellable` flag plus reason)
+- [x] `DELETE /api/bookings/{id}` or `POST /api/bookings/{id}/cancel` (cancel)
+- [x] `POST /api/classes` (staff create class)
+- [x] `GET /api/classes/{id}/roster` (seated members and waitlist in queue order)
+- [x] Check the acting user's role on staff endpoints and ownership on cancel (do not rely on hidden buttons)
+- [x] CORS configured from an environment variable
+- [x] Use DTOs, not entities, in responses
 
 ## 4. API documentation
 
-- [ ] Add `springdoc-openapi-starter-webmvc-ui`
-- [ ] Document book, cancel and roster: request, a success response and at least one error response each
-- [ ] Add examples for 400, 404 and 409
-- [ ] Open `/swagger-ui.html` and check it renders
+- [x] Add `springdoc-openapi-starter-webmvc-ui`
+- [x] Document book, cancel and roster: request, a success response and at least one error response each
+- [x] Add examples for 400, 404 and 409
+- [x] Open `/swagger-ui.html` and check it renders
+
 
 ## 5. Automated tests
 
@@ -158,8 +157,6 @@ Goal: make the app feel smarter than a plain booking list, using data you alread
 
 - [ ] "Add to calendar" button on each booking that downloads an `.ics` file (Asia/Colombo time)
 
-Why it impresses: it is useful, uses no paid services, is easy to explain, and shows you understand the business rules rather than only the screens.
-
 ## 12. README and delivery
 
 - [ ] Project overview and tech stack
@@ -182,9 +179,3 @@ Why it impresses: it is useful, uses no paid services, is easy to explain, and s
 - [ ] Practise explaining: UTC storage with Colombo display, the row lock, waitlist ordering, promotion, error shape
 - [ ] Practise one small live change, for example changing the cutoff from 2 hours to 3 hours or limiting members to 3 bookings per day
 
-## Suggested schedule
-
-- **Thursday:** sections 1 to 4, then start 6 and 7
-- **Friday morning:** finish 7 and 8, write tests (section 5)
-- **Friday afternoon:** unique feature (11), README (12), fresh-clone test, then the AI feature (10) only if there is time
-- **Friday evening:** buffer until 8 pm, final push well before 11:59 pm
