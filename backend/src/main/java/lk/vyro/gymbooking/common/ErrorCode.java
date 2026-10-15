@@ -1,0 +1,12 @@
+package lk.vyro.gymbooking.common;
+
+public enum ErrorCode {
+    RESOURCE_NOT_FOUND,
+    CLASS_ALREADY_STARTED,
+    DUPLICATE_BOOKING,
+    CANCELLATION_WINDOW_PASSED,
+    OVERLAPPING_CLASS,
+    CLASS_FULL,
+    INVALID_INPUT,
+    UNEXPECTED_ERROR
+}
