@@ -75,13 +75,14 @@ All logic lives in `BookingService`, inside `@Transactional`, after locking the 
 
 ## 6. Frontend: shared pieces
 
-- [ ] API client with `axios`, base URL from `VITE_API_URL`
-- [ ] Turn the server error JSON into readable messages (toast or inline)
-- [ ] User switcher in the header (members and staff), saved in `localStorage`
-- [ ] Routes: `/schedule`, `/my-bookings`, `/staff`
-- [ ] Reusable Loading, Empty and Error components
-- [ ] Dark and light mode working on every screen
-- [ ] Check every screen at phone width (F12 device mode)
+- [x] API client with `axios`, base URL from `VITE_API_URL`
+- [x] Turn the server error JSON into readable messages (toast or inline)
+- [x] User switcher in the header (members and staff), saved in `localStorage`
+- [x] Routes: `/schedule`, `/my-bookings`, `/staff`
+- [x] Reusable Loading, Empty and Error components
+- [x] Dark and light mode working on every screen
+- [x] Check every screen at phone width (F12 device mode)
+
 
 ## 7. Frontend: member side
 
