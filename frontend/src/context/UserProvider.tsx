@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import type { User } from '../types';
 import { fetchUsers } from '../api/client';
-import { UserContext } from './userContext';
+import { UserContext } from './useUser';
 
 const USER_STORAGE_KEY = 'vyro-user-id';
 

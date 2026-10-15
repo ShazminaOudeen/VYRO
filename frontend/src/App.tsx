@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { UserProvider } from './context/UserContext';
+import { UserProvider } from './context/UserProvider';
 import { AppHeader } from './components/layout/AppHeader';
 import { SchedulePage } from './pages/SchedulePage';
 import { MyBookingsPage } from './pages/MyBookingsPage';

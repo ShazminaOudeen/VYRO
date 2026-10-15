@@ -8,7 +8,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/userContext';
+import { useUser } from '../../context/useUser';
 import { useThemeMode } from '../../theme/context';
 
 const { Header } = Layout;

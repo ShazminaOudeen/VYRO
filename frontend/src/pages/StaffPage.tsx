@@ -1,6 +1,6 @@
 import { Typography, Card, Alert } from 'antd';
 import { TeamOutlined } from '@ant-design/icons';
-import { useUser } from '../context/userContext';
+import { useUser } from '../context/useUser';
 
 export function StaffPage() {
     const { isStaff, currentUser } = useUser();
