@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Tabs, Alert, message, Space, Badge } from 'antd';
+import { Typography, Tabs, Alert, Space, Badge } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import { useUser } from '../context/useUser';
 import { fetchMyBookings, cancelBooking, getApiErrorMessage } from '../api/client';
 import { BookingCard } from '../components/booking/BookingCard';
+import { CancellationSuccessModal } from '../components/booking/CancellationSuccessModal';
+import { BookingConflictModal } from '../components/booking/BookingConflictModal';
 import { LoadingState } from '../components/common/LoadingState';
 import { EmptyState } from '../components/common/EmptyState';
 import { ErrorState } from '../components/common/ErrorState';
@@ -19,6 +21,10 @@ export function MyBookingsPage() {
     const [error, setError] = useState<string | null>(null);
     const [cancellingId, setCancellingId] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'ACTIVE' | 'ALL' | 'CANCELLED'>('ACTIVE');
+
+    // Modals
+    const [cancelledBooking, setCancelledBooking] = useState<Booking | null>(null);
+    const [cancelError, setCancelError] = useState<string | null>(null);
 
     const loadBookings = async () => {
         if (!currentUser) return;
@@ -61,13 +67,17 @@ export function MyBookingsPage() {
 
     const handleCancel = async (bookingId: number) => {
         if (!currentUser) return;
+        const targetBooking = bookings.find((b) => b.id === bookingId);
         setCancellingId(bookingId);
         try {
             await cancelBooking(bookingId, currentUser.id);
-            message.success('Booking cancelled successfully.');
+            // Open the professional cancellation feedback modal
+            if (targetBooking) {
+                setCancelledBooking(targetBooking);
+            }
             await loadBookings();
         } catch (err) {
-            message.error(getApiErrorMessage(err));
+            setCancelError(getApiErrorMessage(err));
         } finally {
             setCancellingId(null);
         }
@@ -181,6 +191,26 @@ export function MyBookingsPage() {
                     )}
                 </>
             )}
+
+            {/* Cancellation Success Feedback Dialog */}
+            <CancellationSuccessModal
+                open={!!cancelledBooking}
+                booking={cancelledBooking}
+                onClose={() => setCancelledBooking(null)}
+                onBrowseClasses={() => {
+                    setCancelledBooking(null);
+                    navigate('/schedule');
+                }}
+            />
+
+            {/* Error / Conflict Dialog if cancellation fails */}
+            <BookingConflictModal
+                open={!!cancelError}
+                error={cancelError}
+                gymClass={null}
+                onClose={() => setCancelError(null)}
+                onViewMyBookings={() => setCancelError(null)}
+            />
         </div>
     );
 }
