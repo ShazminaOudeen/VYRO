@@ -1,4 +1,4 @@
-# VYRO: High-Integrity Studio Fitness Class Booking Platform
+# VYRO: Gym Class Booking Platform
 **Software Engineering Assessment**  
 *High-concurrency studio scheduling, pessimistic capacity locking, explainable FIFO waitlist engine, and GenAI class discovery.*
 
