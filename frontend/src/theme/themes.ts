@@ -2,8 +2,7 @@ import { theme, type ThemeConfig } from 'antd';
 
 export type Mode = 'dark' | 'light';
 
-const font =
-  "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+const font = "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
 export const vyroDark: ThemeConfig = {
   algorithm: theme.darkAlgorithm,
