@@ -3,6 +3,7 @@ import { Modal, Form, Input, InputNumber, DatePicker, Select, message, Row, Col 
 import dayjs, { Dayjs } from 'dayjs';
 import { useUser } from '../../context/useUser';
 import { createGymClass, getApiErrorMessage } from '../../api/client';
+import { PRESET_IMAGES, saveCustomClassImage } from '../../utils/classMedia';
 import type { GymClass } from '../../types';
 
 interface CreateClassModalProps {
@@ -24,6 +25,10 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
     const { users, currentUser } = useUser();
     const [form] = Form.useForm<FormValues>();
     const [submitting, setSubmitting] = useState(false);
+
+    // Cover image state
+    const [selectedImage, setSelectedImage] = useState<string>(PRESET_IMAGES[0].url);
+    const [customImageUrl, setCustomImageUrl] = useState<string>('');
 
     // Filter registered staff members for the coach dropdown
     const staffMembers = users.filter((u) => u.role === 'STAFF');
@@ -58,8 +63,15 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                 capacity: Number(values.capacity),
             });
 
+            // Associate the chosen image with this class
+            const finalImage = customImageUrl.trim() || selectedImage;
+            if (finalImage) {
+                saveCustomClassImage(values.title, finalImage);
+            }
+
             message.success(`Class "${values.title}" created successfully!`);
             form.resetFields();
+            setCustomImageUrl('');
             onSuccess();
             onClose();
         } catch (err: unknown) {
@@ -74,6 +86,7 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
 
     const handleCancel = () => {
         form.resetFields();
+        setCustomImageUrl('');
         onClose();
     };
 
@@ -110,7 +123,7 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
             okText="Create Class"
             confirmLoading={submitting}
             destroyOnClose
-            width={520}
+            width={540}
         >
             <Form
                 form={form}
@@ -151,6 +164,63 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                         placeholder="e.g. Sunrise Yoga, HIIT Blast, Strength Circuit"
                         maxLength={120}
                         showCount
+                    />
+                </Form.Item>
+
+                {/* Cover Image Gallery & Custom URL */}
+                <Form.Item label="Cover Photo / Workout Theme" extra="Select a preset theme or paste a custom image URL">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 10 }}>
+                        {PRESET_IMAGES.map((preset) => {
+                            const isSelected = selectedImage === preset.url && !customImageUrl;
+                            return (
+                                <div
+                                    key={preset.id}
+                                    onClick={() => {
+                                        setSelectedImage(preset.url);
+                                        setCustomImageUrl('');
+                                    }}
+                                    style={{
+                                        position: 'relative',
+                                        height: 64,
+                                        borderRadius: 8,
+                                        overflow: 'hidden',
+                                        cursor: 'pointer',
+                                        border: isSelected ? '2px solid #00d084' : '1px solid rgba(0,0,0,0.12)',
+                                        boxShadow: isSelected ? '0 0 0 2px rgba(0,208,132,0.2)' : 'none',
+                                    }}
+                                >
+                                    <img
+                                        src={preset.url}
+                                        alt={preset.label}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            padding: '2px 6px',
+                                            background: 'rgba(0,0,0,0.65)',
+                                            fontSize: 10,
+                                            color: '#fff',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}
+                                    >
+                                        {preset.label.split(' ')[0]}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <Input
+                        placeholder="Or enter a custom image URL (https://...)"
+                        value={customImageUrl}
+                        onChange={(e) => setCustomImageUrl(e.target.value)}
+                        allowClear
                     />
                 </Form.Item>
 
