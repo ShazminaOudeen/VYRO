@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Row, Col, Space, Tag, Button, Flex } from 'antd';
 import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -30,7 +30,7 @@ export function SchedulePage() {
     const [conflictError, setConflictError] = useState<string | null>(null);
     const [conflictClass, setConflictClass] = useState<GymClass | null>(null);
 
-    const loadSchedule = async () => {
+    const loadSchedule = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -42,12 +42,30 @@ export function SchedulePage() {
         } finally {
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        loadSchedule();
     }, [currentUser?.id, isStaff]);
 
+    useEffect(() => {
+        let ignore = false;
+        const memberId = !isStaff ? currentUser?.id : undefined;
+
+        fetchSchedule(memberId)
+            .then((data) => {
+                if (!ignore) {
+                    setClasses(data);
+                    setLoading(false);
+                }
+            })
+            .catch((err) => {
+                if (!ignore) {
+                    setError(getApiErrorMessage(err));
+                    setLoading(false);
+                }
+            });
+
+        return () => {
+            ignore = true;
+        };
+    }, [currentUser?.id, isStaff]);
 
     // Group classes by day (YYYY-MM-DD)
     const groupedClasses = useMemo(() => {
@@ -94,8 +112,9 @@ export function SchedulePage() {
             // Pop up the professional confirmation dialog!
             setBookingResult(booking);
 
-            // Refresh availability numbers
-            const updated = await fetchSchedule();
+            // Refresh availability numbers with clash preview
+            const memberId = !isStaff ? currentUser?.id : undefined;
+            const updated = await fetchSchedule(memberId);
             setClasses(updated);
 
             // Also update the details modal if it's currently open
