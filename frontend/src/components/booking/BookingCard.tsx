@@ -43,10 +43,12 @@ export function BookingCard({ booking, onCancel, isCancelling }: BookingCardProp
     const isSeatLikely = queuePos <= 2 && hoursUntil > 2;
 
     // Calculate visual progress percentage toward promotion
-    let queueProgressPercent = 30;
-    if (queuePos === 1) queueProgressPercent = hoursUntil > 2 ? 85 : 55;
-    else if (queuePos === 2) queueProgressPercent = hoursUntil > 2 ? 65 : 40;
-    else queueProgressPercent = Math.max(15, 35 - (queuePos - 2) * 8);
+    const queueProgressPercent =
+        queuePos === 1
+            ? (hoursUntil > 2 ? 85 : 55)
+            : queuePos === 2
+                ? (hoursUntil > 2 ? 65 : 40)
+                : Math.max(15, 35 - (queuePos - 2) * 8);
 
     const renderStatusTag = () => {
         switch (booking.status) {
