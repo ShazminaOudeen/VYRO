@@ -165,17 +165,18 @@ Goal: make the app feel smarter than a plain booking list, using data you alread
 
 ## 12. README and delivery
 
-- [ ] Project overview and tech stack
-- [ ] How to run: Docker option (port 3307) and local MySQL option (port 3306, with the SQL to create the database and user)
-- [ ] Commands for backend, frontend, tests, Swagger URL
-- [ ] Seed data summary and how to reset it
-- [ ] Decisions on open questions: re-booking after cancelling (allowed), promotion that would now overlap (skip and promote the next person), cancelling a waitlist place (allowed within the same cutoff)
-- [ ] Troubleshooting: port conflicts, Docker not running, Java 21
-- [ ] AI feature notes: which model, how to get a free key, fallback behavior
-- [ ] CI badge
-- [ ] Fresh-clone test: clone into a new folder, empty database, follow only the README
-- [ ] Confirm everything is merged into `main` and pushed before 11:59 pm Friday
-- [ ] Send the repo link (give read access if private)
+- [x] Project overview and tech stack
+- [x] How to run: Docker option (port 3307) and local MySQL option (port 3306, with the SQL to create the database and user)
+- [x] Commands for backend, frontend, tests, Swagger URL
+- [x] Seed data summary and how to reset it
+- [x] Decisions on open questions: re-booking after cancelling (allowed), promotion that would now overlap (skip and promote the next person), cancelling a waitlist place (allowed within the same cutoff)
+- [x] Troubleshooting: port conflicts, Docker not running, Java 21
+- [x] AI feature notes: which model, how to get a free key, fallback behavior
+- [x] CI badge
+- [x] Fresh-clone test: clone into a new folder, empty database, follow only the README
+- [x] Confirm everything is merged into `main` and pushed before 11:59 pm Friday
+- [x] Send the repo link (give read access if private)
+
 
 ## 13. Viva preparation
 
