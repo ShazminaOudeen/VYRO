@@ -52,7 +52,7 @@ export function AppHeader() {
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: 12,
-                padding: '8px 16px',
+                padding: '8px 24px',
                 minHeight: 64,
                 height: 'auto',
                 background: token.colorBgContainer,
@@ -63,31 +63,42 @@ export function AppHeader() {
             }}
         >
             {/* Brand & Nav */}
-            <Space size={16} align="center" style={{ flexWrap: 'wrap' }}>
-                <Space
-                    size={10}
-                    style={{ cursor: 'pointer' }}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                    }}
                     onClick={() => navigate('/schedule')}
                 >
-                    <div
+                    <img
+                        src="/logo.jpg"
+                        alt="VYRO Logo"
                         style={{
-                            width: 34,
-                            height: 34,
+                            width: 38,
+                            height: 38,
                             borderRadius: 8,
-                            display: 'grid',
-                            placeItems: 'center',
-                            background: token.colorPrimary,
-                            color: token.colorTextLightSolid,
-                            fontWeight: 700,
-                            fontSize: 18,
+                            objectFit: 'cover',
+                            display: 'block',
+                            boxShadow: '0 2px 6px rgba(0, 208, 132, 0.25)',
+                        }}
+                    />
+                    <Typography.Text
+                        strong
+                        style={{
+                            fontSize: 20,
+                            fontWeight: 800,
+                            letterSpacing: 1.5,
+                            margin: 0,
+                            lineHeight: 1,
                         }}
                     >
-                        V
-                    </div>
-                    <Typography.Text strong style={{ fontSize: 18, letterSpacing: 1 }}>
                         VYRO
                     </Typography.Text>
-                </Space>
+                </div>
 
                 <Menu
                     mode="horizontal"
@@ -101,7 +112,7 @@ export function AppHeader() {
                         minWidth: 280,
                     }}
                 />
-            </Space>
+            </div>
 
             {/* User Switcher & Dark Mode Toggle */}
             <Space size={12} align="center" style={{ flexWrap: 'wrap' }}>
