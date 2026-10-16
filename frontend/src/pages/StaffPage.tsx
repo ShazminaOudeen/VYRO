@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Typography, Button, Table, Tag, Progress, Alert, Flex } from 'antd';
+import { Typography, Button, Table, Tag, Progress, Alert, Flex, Space, Popconfirm, message } from 'antd';
 import {
     TeamOutlined,
     PlusOutlined,
     ClockCircleOutlined,
     UserOutlined,
     EyeOutlined,
+    ReloadOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useUser } from '../context/useUser';
-import { fetchSchedule, getApiErrorMessage } from '../api/client';
+import { fetchSchedule, resetDemoData, getApiErrorMessage } from '../api/client';
 import { CreateClassModal } from '../components/staff/CreateClassModal';
 import { RosterModal } from '../components/staff/RosterModal';
 import { LoadingState } from '../components/common/LoadingState';
@@ -23,6 +24,7 @@ export function StaffPage() {
     const [classes, setClasses] = useState<GymClass[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [resetting, setResetting] = useState(false);
 
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [selectedClassForRoster, setSelectedClassForRoster] = useState<GymClass | null>(null);
@@ -37,6 +39,19 @@ export function StaffPage() {
             setError(getApiErrorMessage(err));
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleResetDemoData = async () => {
+        setResetting(true);
+        try {
+            const res = await resetDemoData();
+            message.success(res.message);
+            await refreshClasses();
+        } catch (err) {
+            message.error(getApiErrorMessage(err));
+        } finally {
+            setResetting(false);
         }
     };
 
@@ -114,28 +129,25 @@ export function StaffPage() {
             title: 'Capacity & Occupancy',
             key: 'capacity',
             render: (_: unknown, record: GymClass) => {
-                const percent = Math.min(100, Math.round((record.bookedCount / record.capacity) * 100));
+                const percent = Math.min(
+                    100,
+                    Math.round((record.bookedCount / record.capacity) * 100)
+                );
                 return (
                     <div style={{ maxWidth: 180 }}>
-                        <Flex justify="space-between" align="center" style={{ marginBottom: 4 }}>
-                            <span style={{ fontSize: 12 }}>
-                                {record.bookedCount} / {record.capacity} booked
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 2 }}>
+                            <span>
+                                <strong>{record.bookedCount}</strong> / {record.capacity} booked
                             </span>
-                            {record.isFull ? (
-                                <Tag color="red" style={{ margin: 0, fontSize: 11 }}>
-                                    Full
-                                </Tag>
-                            ) : (
-                                <Tag color="green" style={{ margin: 0, fontSize: 11 }}>
-                                    {record.seatsLeft} left
-                                </Tag>
-                            )}
-                        </Flex>
+                            <span style={{ color: record.isFull ? '#ff4d4f' : '#00d084', fontWeight: 600 }}>
+                                {record.isFull ? 'Full' : `${record.seatsLeft} left`}
+                            </span>
+                        </div>
                         <Progress
                             percent={percent}
                             size="small"
-                            status={record.isFull ? 'exception' : 'active'}
                             showInfo={false}
+                            strokeColor={record.isFull ? '#faad14' : '#00d084'}
                         />
                     </div>
                 );
@@ -143,13 +155,11 @@ export function StaffPage() {
         },
         {
             title: 'Waitlist',
-            dataIndex: 'waitlistCount',
             key: 'waitlist',
-            width: 120,
-            render: (count: number) =>
-                count > 0 ? (
+            render: (_: unknown, record: GymClass) =>
+                record.waitlistCount > 0 ? (
                     <Tag color="warning" icon={<ClockCircleOutlined />}>
-                        {count} waiting
+                        {record.waitlistCount} waiting
                     </Tag>
                 ) : (
                     <Typography.Text type="secondary">None</Typography.Text>
@@ -184,21 +194,34 @@ export function StaffPage() {
                         Schedule classes, monitor seat occupancy, and inspect real-time member attendance rosters.
                     </Typography.Paragraph>
                 </div>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    size="large"
-                    onClick={() => setCreateModalOpen(true)}
-                >
-                    Create Class
-                </Button>
+                <Space>
+                    <Popconfirm
+                        title="Reset Demo Schedule & Bookings"
+                        description="This will clear test data and re-seed 8 fresh classes across the next 7 days relative to right now. Continue?"
+                        okText="Yes, Reset"
+                        cancelText="Cancel"
+                        onConfirm={handleResetDemoData}
+                    >
+                        <Button icon={<ReloadOutlined />} loading={resetting} size="large">
+                            Reset Demo Data
+                        </Button>
+                    </Popconfirm>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        size="large"
+                        onClick={() => setCreateModalOpen(true)}
+                    >
+                        Create Class
+                    </Button>
+                </Space>
             </Flex>
 
             {/* Class Table or Empty State */}
             {classes.length === 0 ? (
                 <EmptyState
                     title="No Classes Scheduled"
-                    description="Create your first fitness class to get started."
+                    description="Create your first fitness class or reset demo data to get started."
                     actionLabel="Create Class"
                     onAction={() => setCreateModalOpen(true)}
                 />
@@ -219,7 +242,6 @@ export function StaffPage() {
                 onSuccess={refreshClasses}
                 existingClasses={classes}
             />
-
 
             {/* Roster Modal */}
             <RosterModal

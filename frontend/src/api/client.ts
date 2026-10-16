@@ -80,3 +80,9 @@ export async function fetchUsers(): Promise<User[]> {
     const res = await api.get<User[]>('/api/users');
     return res.data;
 }
+
+export async function resetDemoData(): Promise<{ status: string; message: string }> {
+    const res = await api.post<{ status: string; message: string }>('/api/dev/reset');
+    return res.data;
+}
+
