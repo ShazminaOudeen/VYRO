@@ -5,6 +5,7 @@ import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
   InfoCircleOutlined,
+  WarningOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { getClassMedia } from '../../utils/classMedia';
@@ -44,6 +45,7 @@ export function ClassCard({ gymClass, onBook, onViewDetails, isBooking, isStaff 
               left: 10,
               display: 'flex',
               gap: 6,
+              flexWrap: 'wrap',
             }}
           >
             <Tag color="geekblue" style={{ margin: 0, fontWeight: 600 }}>
@@ -52,17 +54,29 @@ export function ClassCard({ gymClass, onBook, onViewDetails, isBooking, isStaff 
             <Tag color="purple" style={{ margin: 0 }}>
               {media.intensity}
             </Tag>
+            {gymClass.clashesWith && (
+              <Tag
+                color="volcano"
+                icon={<WarningOutlined />}
+                style={{ margin: 0, fontWeight: 600 }}
+              >
+                Clashes with {gymClass.clashesWith}
+              </Tag>
+            )}
           </div>
         </div>
       }
       style={{
         borderRadius: 14,
-        border: `1px solid ${token.colorBorderSecondary}`,
+        border: gymClass.clashesWith
+          ? `1px solid ${token.colorWarningBorder}`
+          : `1px solid ${token.colorBorderSecondary}`,
         overflow: 'hidden',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        opacity: gymClass.clashesWith ? 0.92 : 1,
       }}
       bodyStyle={{ padding: 16, width: '100%' }}
     >
@@ -120,6 +134,12 @@ export function ClassCard({ gymClass, onBook, onViewDetails, isBooking, isStaff 
           <Tooltip title="Staff users cannot book classes. Switch to a Member in the header to book.">
             <Button disabled style={{ flex: 2 }}>
               Staff Only
+            </Button>
+          </Tooltip>
+        ) : gymClass.clashesWith ? (
+          <Tooltip title={`Cannot book: Clashes with your confirmed booking "${gymClass.clashesWith}"`}>
+            <Button disabled style={{ flex: 2 }}>
+              Clash Preview
             </Button>
           </Tooltip>
         ) : (

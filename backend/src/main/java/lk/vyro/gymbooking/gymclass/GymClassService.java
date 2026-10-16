@@ -1,5 +1,6 @@
 package lk.vyro.gymbooking.gymclass;
 
+import lk.vyro.gymbooking.booking.Booking;
 import lk.vyro.gymbooking.booking.BookingRepository;
 import lk.vyro.gymbooking.booking.BookingStatus;
 import lk.vyro.gymbooking.common.BusinessRuleException;
@@ -52,11 +53,21 @@ public class GymClassService {
 
     @Transactional(readOnly = true)
     public List<GymClassResponse> getScheduleNext7Days() {
+        return getScheduleNext7Days(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GymClassResponse> getScheduleNext7Days(Long memberId) {
         Instant now = Instant.now(clock);
         Instant end = now.plus(Duration.ofDays(7));
-        return gymClassRepository.findByStartsAtBetweenOrderByStartsAtAsc(now, end)
-                .stream()
-                .map(this::toResponse)
+        List<GymClass> classes = gymClassRepository.findByStartsAtBetweenOrderByStartsAtAsc(now, end);
+
+        List<Booking> activeBookings = (memberId != null)
+                ? bookingRepository.findActiveBookingsByMember(memberId)
+                : List.of();
+
+        return classes.stream()
+                .map(c -> toResponseWithClash(c, activeBookings))
                 .toList();
     }
 
@@ -68,10 +79,27 @@ public class GymClassService {
     }
 
     public GymClassResponse toResponse(GymClass gymClass) {
+        return toResponseWithClash(gymClass, List.of());
+    }
+
+    private GymClassResponse toResponseWithClash(GymClass gymClass, List<Booking> activeBookings) {
         long bookedCount = bookingRepository.countByGymClassIdAndStatus(gymClass.getId(), BookingStatus.BOOKED);
         long waitlistCount = bookingRepository.countByGymClassIdAndStatus(gymClass.getId(), BookingStatus.WAITLISTED);
         int seatsLeft = Math.max(0, gymClass.getCapacity() - (int) bookedCount);
         boolean isFull = seatsLeft == 0;
+
+        String clashesWith = null;
+        for (Booking b : activeBookings) {
+            if (!b.getGymClass().getId().equals(gymClass.getId())) {
+                Instant bStart = b.getGymClass().getStartsAt();
+                Instant bEnd = b.getGymClass().getEndsAt();
+                // Two intervals [start, end) overlap if start < bEnd && end > bStart
+                if (gymClass.getStartsAt().isBefore(bEnd) && gymClass.getEndsAt().isAfter(bStart)) {
+                    clashesWith = b.getGymClass().getTitle();
+                    break;
+                }
+            }
+        }
 
         return new GymClassResponse(
                 gymClass.getId(),
@@ -84,7 +112,8 @@ public class GymClassService {
                 bookedCount,
                 seatsLeft,
                 waitlistCount,
-                isFull
+                isFull,
+                clashesWith
         );
     }
 }

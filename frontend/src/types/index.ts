@@ -21,7 +21,9 @@ export interface GymClass {
   seatsLeft: number;
   waitlistCount: number;
   isFull: boolean;
+  clashesWith?: string | null;
 }
+
 
 export interface Booking {
   id: number;

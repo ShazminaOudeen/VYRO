@@ -42,11 +42,13 @@ public class GymClassController {
         this.userRepository = userRepository;
     }
 
-    @Operation(summary = "Get upcoming 7-day schedule", description = "Returns classes starting within the next 7 days, including remaining seats or waitlist count.")
+    @Operation(summary = "Get upcoming 7-day schedule", description = "Returns classes starting within the next 7 days, including remaining seats, waitlist count, and clash preview.")
     @ApiResponse(responseCode = "200", description = "List of upcoming gym classes")
     @GetMapping
-    public ResponseEntity<List<GymClassResponse>> getSchedule() {
-        return ResponseEntity.ok(gymClassService.getScheduleNext7Days());
+    public ResponseEntity<List<GymClassResponse>> getSchedule(
+            @Parameter(description = "Optional ID of member to evaluate schedule clashes")
+            @RequestParam(value = "memberId", required = false) Long memberId) {
+        return ResponseEntity.ok(gymClassService.getScheduleNext7Days(memberId));
     }
 
     @Operation(summary = "Get class by ID", description = "Returns a single class by its primary key.")
