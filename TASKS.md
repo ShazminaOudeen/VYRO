@@ -148,19 +148,20 @@ Goal: make the app feel smarter than a plain booking list, using data you alread
 
 **Part A: Clash preview on the schedule**
 
-- [ ] When a member views the schedule, mark classes that overlap one of their BOOKED classes with a small "Clashes with Spin Cycle" tag
-- [ ] Disable the Book button for those classes and show the reason, while the backend still enforces rule 6
-- [ ] Backend returns a `clashesWith` field per class for the current member
+- [x] When a member views the schedule, mark classes that overlap one of their BOOKED classes with a small "Clashes with Spin Cycle" tag
+- [x] Disable the Book button for those classes and show the reason, while the backend still enforces rule 6
+- [x] Backend returns a `clashesWith` field per class for the current member
 
 **Part B: Waitlist odds**
 
-- [ ] For a waitlisted booking, show "You are #2. Seat likely" or "Seat unlikely" based on position, the time left, and how many members ahead
-- [ ] Keep the formula simple and explainable (for example: position 1 or 2 with more than 2 hours left is likely)
-- [ ] Show a progress-style queue indicator on My bookings
+- [x] For a waitlisted booking, show "You are #2. Seat likely" or "Seat unlikely" based on position, the time left, and how many members ahead
+- [x] Keep the formula simple and explainable (for example: position 1 or 2 with more than 2 hours left is likely)
+- [x] Show a progress-style queue indicator on My bookings
 
 **Part C (stretch): Add to calendar**
 
-- [ ] "Add to calendar" button on each booking that downloads an `.ics` file (Asia/Colombo time)
+- [x] "Add to calendar" button on each booking that downloads an `.ics` file (Asia/Colombo time)
+
 
 ## 12. README and delivery
 
