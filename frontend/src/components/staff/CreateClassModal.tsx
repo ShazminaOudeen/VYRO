@@ -9,7 +9,7 @@ import type { GymClass } from '../../types';
 interface CreateClassModalProps {
     open: boolean;
     onClose: () => void;
-    onSuccess: () => void;
+    onSuccess: (created?: GymClass) => void;
     existingClasses?: GymClass[];
 }
 
@@ -55,7 +55,7 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
             const values = await form.validateFields();
             setSubmitting(true);
 
-            await createGymClass({
+            const created = await createGymClass({
                 title: values.title.trim(),
                 coach: values.coach.trim(),
                 startsAt: values.startsAt.toISOString(),
@@ -69,10 +69,9 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                 saveCustomClassImage(values.title, finalImage);
             }
 
-            message.success(`Class "${values.title}" created successfully!`);
             form.resetFields();
             setCustomImageUrl('');
-            onSuccess();
+            onSuccess(created);
             onClose();
         } catch (err: unknown) {
             if (err && typeof err === 'object' && 'errorFields' in err) {
@@ -276,6 +275,7 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                             name="durationMinutes"
                             label="Duration (minutes)"
                             extra="Allowed: 15–180 mins"
+                            validateTrigger={['onChange', 'onBlur']}
                             rules={[
                                 { required: true, message: 'Duration is required' },
                                 {
@@ -299,8 +299,6 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                             ]}
                         >
                             <InputNumber
-                                min={15}
-                                max={180}
                                 precision={0}
                                 onKeyDown={blockNonNumericKeys}
                                 style={{ width: '100%' }}
@@ -315,6 +313,7 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                             name="capacity"
                             label="Max Capacity (seats)"
                             extra="Allowed: 1–50 seats"
+                            validateTrigger={['onChange', 'onBlur']}
                             rules={[
                                 { required: true, message: 'Capacity is required' },
                                 {
@@ -338,8 +337,6 @@ export function CreateClassModal({ open, onClose, onSuccess, existingClasses = [
                             ]}
                         >
                             <InputNumber
-                                min={1}
-                                max={50}
                                 precision={0}
                                 onKeyDown={blockNonNumericKeys}
                                 style={{ width: '100%' }}

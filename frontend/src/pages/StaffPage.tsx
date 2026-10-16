@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Button, Table, Tag, Progress, Alert, Flex, Space, Popconfirm, message } from 'antd';
 import {
     TeamOutlined,
@@ -12,6 +13,7 @@ import dayjs from 'dayjs';
 import { useUser } from '../context/useUser';
 import { fetchSchedule, resetDemoData, getApiErrorMessage } from '../api/client';
 import { CreateClassModal } from '../components/staff/CreateClassModal';
+import { ClassCreatedModal } from '../components/staff/ClassCreatedModal';
 import { RosterModal } from '../components/staff/RosterModal';
 import { LoadingState } from '../components/common/LoadingState';
 import { EmptyState } from '../components/common/EmptyState';
@@ -20,6 +22,7 @@ import type { GymClass } from '../types';
 
 export function StaffPage() {
     const { isStaff, currentUser } = useUser();
+    const navigate = useNavigate();
 
     const [classes, setClasses] = useState<GymClass[]>([]);
     const [loading, setLoading] = useState(true);
@@ -28,6 +31,7 @@ export function StaffPage() {
 
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [selectedClassForRoster, setSelectedClassForRoster] = useState<GymClass | null>(null);
+    const [createdClassSuccess, setCreatedClassSuccess] = useState<GymClass | null>(null);
 
     const refreshClasses = async () => {
         setLoading(true);
@@ -239,8 +243,24 @@ export function StaffPage() {
             <CreateClassModal
                 open={createModalOpen}
                 onClose={() => setCreateModalOpen(false)}
-                onSuccess={refreshClasses}
+                onSuccess={(created) => {
+                    refreshClasses();
+                    if (created) {
+                        setCreatedClassSuccess(created);
+                    }
+                }}
                 existingClasses={classes}
+            />
+
+            {/* Class Created Success Modal */}
+            <ClassCreatedModal
+                open={!!createdClassSuccess}
+                gymClass={createdClassSuccess}
+                onClose={() => setCreatedClassSuccess(null)}
+                onViewSchedule={() => {
+                    setCreatedClassSuccess(null);
+                    navigate('/schedule');
+                }}
             />
 
             {/* Roster Modal */}
