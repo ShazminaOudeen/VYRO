@@ -17,6 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 import java.time.Clock;
 import java.time.DayOfWeek;
@@ -118,13 +122,45 @@ public class AiService {
 
     private record GeminiCallResult(boolean success, List<AiClassSuggestion> suggestions) {}
 
-    private String resolveApiKey() {
+        private String resolveApiKey() {
         if (configuredApiKey != null && !configuredApiKey.isBlank()) {
             return configuredApiKey.trim();
         }
         String envKey = System.getenv("GEMINI_API_KEY");
         if (envKey != null && !envKey.isBlank()) {
             return envKey.trim();
+        }
+        return readApiKeyFromDotEnv();
+    }
+
+    private String readApiKeyFromDotEnv() {
+        List<Path> potentialPaths = List.of(
+                Paths.get(".env"),
+                Paths.get("backend", ".env"),
+                Paths.get("..", ".env")
+        );
+
+        for (Path path : potentialPaths) {
+            if (Files.exists(path)) {
+                try {
+                    List<String> lines = Files.readAllLines(path);
+                    for (String line : lines) {
+                        line = line.trim();
+                        if (line.startsWith("GEMINI_API_KEY=")) {
+                            String value = line.substring("GEMINI_API_KEY=".length()).trim();
+                            if ((value.startsWith("\"") && value.endsWith("\"")) ||
+                                (value.startsWith("'") && value.endsWith("'"))) {
+                                value = value.substring(1, value.length() - 1);
+                            }
+                            if (!value.isBlank()) {
+                                return value;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    log.debug("Could not read .env at {}: {}", path, e.getMessage());
+                }
+            }
         }
         return null;
     }
