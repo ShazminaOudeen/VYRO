@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Row, Col, Space, Tag, Button, Flex } from 'antd';
 import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -30,7 +30,7 @@ export function SchedulePage() {
     const [conflictError, setConflictError] = useState<string | null>(null);
     const [conflictClass, setConflictClass] = useState<GymClass | null>(null);
 
-    const loadSchedule = useCallback(async () => {
+    const loadSchedule = async () => {
         setLoading(true);
         setError(null);
         try {
@@ -42,7 +42,7 @@ export function SchedulePage() {
         } finally {
             setLoading(false);
         }
-    }, [currentUser?.id, isStaff]);
+    };
 
     useEffect(() => {
         let ignore = false;
@@ -65,7 +65,7 @@ export function SchedulePage() {
         return () => {
             ignore = true;
         };
-    }, [currentUser?.id, isStaff]);
+    }, [currentUser, isStaff]);
 
     // Group classes by day (YYYY-MM-DD)
     const groupedClasses = useMemo(() => {
