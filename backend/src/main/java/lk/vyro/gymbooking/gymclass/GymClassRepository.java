@@ -21,4 +21,6 @@ public interface GymClassRepository extends JpaRepository<GymClass, Long> {
     List<GymClass> findByStartsAtBetweenOrderByStartsAtAsc(Instant start, Instant end);
 
     List<GymClass> findAllByOrderByStartsAtAsc();
+
+    long countByStartsAtAfter(Instant after);
 }
