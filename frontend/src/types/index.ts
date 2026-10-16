@@ -53,3 +53,15 @@ export interface ApiError {
   code?: string;
   message?: string;
 }
+
+export interface AiClassSuggestion {
+  classId: number;
+  gymClass: GymClass;
+  reason: string;
+}
+
+export interface AiSuggestionResponse {
+  query: string;
+  mode: 'GEMINI' | 'FALLBACK';
+  suggestions: AiClassSuggestion[];
+}

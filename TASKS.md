@@ -106,11 +106,11 @@ All logic lives in `BookingService`, inside `@Transactional`, after locking the 
 
 ## 9. Bonus items (each one done well counts)
 
-- [ ] Docker Compose for MySQL (done), and extend to the whole app if time allows
-- [ ] GitHub Actions: build and test (done), make it green
-- [ ] ESLint (done), add Prettier or Spotless
-- [ ] Maven wrapper (done)
-- [ ] Reset-to-seed-data endpoint or script (for example `POST /api/dev/reset`, enabled only in a dev profile)
+- [x] Docker Compose for MySQL (done), and extend to the whole app if time allows
+- [x] GitHub Actions: build and test (done), make it green
+- [x] ESLint (done), add Prettier or Spotless
+- [x] Maven wrapper (done)
+- [x] Reset-to-seed-data endpoint or script (for example `POST /api/dev/reset`, enabled only in a dev profile)
 - [ ] CI status badge in the README
 
 ## 10. Optional AI feature: "Ask for a class"
@@ -119,27 +119,28 @@ Only start this once sections 1 to 8 are finished and tested.
 
 **Backend**
 
-- [ ] Endpoint `POST /api/ai/suggestions` with the member's plain-words request
-- [ ] Load only classes that exist in the next 7 days, are not started, and the member could still book
-- [ ] Send the model a compact list (id, title, coach, start time, duration) and the request; ask for JSON with up to 3 `{classId, reason}` items
-- [ ] Use a free model only: Gemini free tier, Groq, OpenRouter free models, or Ollama locally. Never pay.
-- [ ] The backend calls the model; the browser never does. Keep the API key in an environment variable, never in git
-- [ ] Parse the JSON safely. Drop any `classId` that is not in the list you sent, drop duplicates, cap at 3
-- [ ] If the model is unavailable, times out, returns bad JSON or returns nothing, fall back to keyword and time matching (for example: relaxing = yoga, pilates, stretch; hard = HIIT, boxing, strength; Saturday morning, after 6 pm, this week)
-- [ ] Response includes a `mode` field (`AI` or `FALLBACK`) so the UI can show which one answered
+- [x] Endpoint `POST /api/ai/suggestions` with the member's plain-words request
+- [x] Load only classes that exist in the next 7 days, are not started, and the member could still book
+- [x] Send the model a compact list (id, title, coach, start time, duration) and the request; ask for JSON with up to 3 `{classId, reason}` items
+- [x] Use a free model only: Gemini free tier, Groq, OpenRouter free models, or Ollama locally. Never pay.
+- [x] The backend calls the model; the browser never does. Keep the API key in an environment variable, never in git
+- [x] Parse the JSON safely. Drop any `classId` that is not in the list you sent, drop duplicates, cap at 3
+- [x] If the model is unavailable, times out, returns bad JSON or returns nothing, fall back to keyword and time matching (for example: relaxing = yoga, pilates, stretch; hard = HIIT, boxing, strength; Saturday morning, after 6 pm, this week)
+- [x] Response includes a `mode` field (`AI` or `FALLBACK`) so the UI can show which one answered
 
 **Frontend**
 
-- [ ] "Ask for a class" box on the member screen
-- [ ] Show up to 3 results, each with a one-line reason and a Book button
-- [ ] Show a clear badge for the answering mode (AI or Keyword match)
-- [ ] Loading and empty states ("No matching classes, try different words")
+- [x] "Ask for a class" box on the member screen
+- [x] Show up to 3 results, each with a one-line reason and a Book button
+- [x] Show a clear badge for the answering mode (AI or Keyword match)
+- [x] Loading and empty states ("No matching classes, try different words")
 
 **Be ready to explain in the viva**
 
-- [ ] What you send to the model
-- [ ] How you turn its answer into classes
-- [ ] What your code does when the answer is wrong or empty
+- [x] What you send to the model
+- [x] How you turn its answer into classes
+- [x] What your code does when the answer is wrong or empty
+
 
 ## 11. Unique feature idea: "Clash-aware schedule + Waitlist odds"
 

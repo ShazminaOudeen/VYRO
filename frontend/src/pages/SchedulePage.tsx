@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { useUser } from '../context/useUser';
 import { fetchSchedule, bookClass, getApiErrorMessage } from '../api/client';
 import { ClassCard } from '../components/schedule/ClassCard';
+import { AiClassFinder } from '../components/schedule/AiClassFinder';
 import { ClassDetailsModal } from '../components/schedule/ClassDetailsModal';
 import { BookingResultModal } from '../components/booking/BookingResultModal';
 import { BookingConflictModal } from '../components/booking/BookingConflictModal';
@@ -176,6 +177,15 @@ export function SchedulePage() {
           </Button>
         </Space>
       </Flex>
+
+      {/* AI Class Recommendation Engine */}
+      <AiClassFinder
+        memberId={currentUser?.id}
+        onBook={handleBook}
+        onViewDetails={(c) => setSelectedClassForDetails(c)}
+        bookingClassId={bookingClassId}
+        isStaff={isStaff}
+      />
 
       {/* Grouped Day Sections */}
       <Space direction="vertical" size={28} style={{ width: '100%' }}>

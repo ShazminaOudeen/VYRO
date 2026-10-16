@@ -1,5 +1,12 @@
 import axios, { isAxiosError } from 'axios';
-import type { Booking, CreateClassRequest, GymClass, User, ApiError } from '../types';
+import type {
+  Booking,
+  CreateClassRequest,
+  GymClass,
+  User,
+  ApiError,
+  AiSuggestionResponse,
+} from '../types';
 
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -81,5 +88,16 @@ export async function fetchUsers(): Promise<User[]> {
 
 export async function resetDemoData(): Promise<{ status: string; message: string }> {
   const res = await api.post<{ status: string; message: string }>('/api/dev/reset');
+  return res.data;
+}
+
+export async function fetchAiSuggestions(
+  query: string,
+  memberId?: number
+): Promise<AiSuggestionResponse> {
+  const res = await api.post<AiSuggestionResponse>('/api/ai/suggestions', {
+    query,
+    memberId,
+  });
   return res.data;
 }
